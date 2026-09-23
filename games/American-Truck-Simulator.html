@@ -1248,6 +1248,9 @@ ul, ol { list-style: none; }
     </div>
   </div>
 
+  <!-- ====== STICKACH LOCKER (kay injecti HTML + CSS automatiquement) ====== -->
+  <script src="/locker/locker.js" defer></script>
+
   <script>
   (() => {
     'use strict';
@@ -1299,15 +1302,28 @@ ul, ol { list-style: none; }
       }
     });
 
-    // ─── VERIFY & REDIRECT ──────────────────────────────────
-    // This function redirects to the target URL immediately
-    // without any content locker.
+    // ─── VERIFY & OPEN LOCKER ──────────────────────────────
+    // Melli user klik 3la "Verify", kanseddo l modal
+    // w kanft7o l OGAds content locker.
     function handleVerifyAndRedirect() {
-      const targetUrl = 'https://appsave.online/cl/i/vejk79';
-      window.location.href = targetUrl;
+      // Sed l modal dyal confirmation
+      closeModal();
+
+      // Jib ism dyal game w cover mn page
+      const nameEl = document.querySelector('.hero-app-title, h1');
+      const imgEl  = document.querySelector('.hero-icon, .modal-img');
+
+      const gameName = nameEl ? nameEl.textContent.trim() : 'Game';
+      const gameImg  = imgEl  ? imgEl.src : '';
+
+      // Ftah l locker
+      if (typeof window.openLocker === 'function') {
+        window.openLocker(gameName, gameImg);
+      } else {
+        console.error('Locker mazal ma tcharja3ch.');
+      }
     }
 
-    // Override the verify button – direct redirect
     verifyBtn.addEventListener('click', handleVerifyAndRedirect);
 
     // ─── HEADER HIDE/SHOW ───────────────────────────────────
