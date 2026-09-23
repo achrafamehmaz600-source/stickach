@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StickAch Test</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0E0A1F;
+            color: #F3F0FF;
+            font-family: Inter, system-ui, sans-serif;
+        }
+        .test-btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #8B5CF6, #6D3FEA);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <button
+        class="test-btn"
+        onclick="openLocker('Test Game', 'https://picsum.photos/100')"
+    >
+        🎮 Test Locker
+    </button>
+
+    <!-- ================= LOCKER HTML ================= -->
+    <div id="sa-locker">
+        <div class="sa-locker-box">
+            <div class="sa-locker-top-line"></div>
+
+            <div class="sa-locker-header">
+                <div class="sa-locker-title-wrap">
+                    <div class="sa-locker-kicker">STICKACH ACCESS</div>
+                    <h2 class="sa-locker-title">Unlock Your Game</h2>
+                </div>
+                <button id="sa-locker-close" class="sa-locker-close" type="button">×</button>
+            </div>
+
+            <div class="sa-locker-body">
+                <div class="sa-game-preview">
+                    <img id="sa-game-image" class="sa-game-image" src="" alt="">
+                    <div class="sa-game-info">
+                        <div class="sa-game-label">Selected game</div>
+                        <div id="sa-game-name" class="sa-game-name">Your game</div>
+                    </div>
+                </div>
+
+                <p id="sa-locker-message" class="sa-locker-message">
+                    Choose an available offer below and follow the advertiser's requirements.
+                </p>
+
+                <div id="sa-offers" class="sa-offers"></div>
+
+                <div class="sa-footer">
+                    Offers are provided by third-party advertisers.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="/locker/locker.css">
+    <script src="/locker/locker.js" defer></script>
+
+</body>
+</html>
