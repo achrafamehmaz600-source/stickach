@@ -46,7 +46,7 @@ export default async (request) => {
 
         const site =
             url.searchParams.get("site") ||
-            "https://your-domain.netlify.app/";
+            "https://stickach1.netlify.app/";
 
         /*
          * Visitor information
