@@ -2,7 +2,20 @@
     "use strict";
 
     /* ============================================================
-       INJECT LOCKER HTML
+       INJECT CSS
+       ============================================================ */
+    function injectLockerCSS() {
+        if (document.querySelector('link[data-sa-locker-css]')) return;
+
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/locker/locker.css";
+        link.setAttribute("data-sa-locker-css", "1");
+        document.head.appendChild(link);
+    }
+
+    /* ============================================================
+       INJECT HTML
        ============================================================ */
     function injectLockerHTML() {
         if (document.getElementById("sa-locker")) return;
@@ -74,20 +87,7 @@
     }
 
     /* ============================================================
-       INJECT CSS
-       ============================================================ */
-    function injectLockerCSS() {
-        if (document.querySelector('link[data-sa-locker-css]')) return;
-
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "/locker/locker.css";
-        link.setAttribute("data-sa-locker-css", "1");
-        document.head.appendChild(link);
-    }
-
-    /* ============================================================
-       SETUP
+       BOOT
        ============================================================ */
     injectLockerCSS();
     injectLockerHTML();
@@ -103,11 +103,37 @@
     const closeButton = document.getElementById("sa-locker-close");
 
     /* ============================================================
-       OPEN LOCKER
+       HELPERS
+       ============================================================ */
+
+    // Returns a safe http(s) URL or "" if invalid.
+    function safeHttpsUrl(url) {
+        try {
+            const u = new URL(url, window.location.origin);
+            return (u.protocol === "https:" || u.protocol === "http:")
+                ? u.toString()
+                : "";
+        } catch {
+            return "";
+        }
+    }
+
+    // Full URL of the current page (path + query, no hash).
+    // This is what OGAds expects for the `site` param.
+    function currentPageSite() {
+        return (
+            window.location.origin +
+            window.location.pathname +
+            window.location.search
+        );
+    }
+
+    /* ============================================================
+       OPEN / CLOSE
        ============================================================ */
     window.openLocker = function (itemName = "", itemImg = "") {
         currentGameName = String(itemName || "");
-        currentGameImage = String(itemImg || "");
+        currentGameImage = safeHttpsUrl(itemImg);
 
         if (gameName) {
             gameName.textContent = currentGameName || "Your game";
@@ -118,6 +144,7 @@
                 gameImage.src = currentGameImage;
                 gameImage.style.display = "block";
             } else {
+                gameImage.removeAttribute("src");
                 gameImage.style.display = "none";
             }
         }
@@ -128,9 +155,6 @@
         loadOffers();
     };
 
-    /* ============================================================
-       CLOSE LOCKER
-       ============================================================ */
     window.closeLocker = function () {
         locker.classList.remove("sa-open");
         document.body.style.overflow = "";
@@ -170,15 +194,31 @@
 
     function showError(text) {
         if (!offersContainer) return;
-        offersContainer.innerHTML = `
-            <div class="sa-error">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:18px;height:18px;flex-shrink:0">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 8v4M12 16h.01"/>
-                </svg>
-                <span>${text}</span>
-            </div>
+        offersContainer.innerHTML = "";
+
+        const wrap = document.createElement("div");
+        wrap.className = "sa-error";
+
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("stroke", "currentColor");
+        svg.setAttribute("stroke-width", "2");
+        svg.setAttribute("stroke-linecap", "round");
+        svg.style.width = "18px";
+        svg.style.height = "18px";
+        svg.style.flexShrink = "0";
+        svg.innerHTML = `
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4M12 16h.01"/>
         `;
+
+        const span = document.createElement("span");
+        span.textContent = String(text || "Something went wrong.");
+
+        wrap.appendChild(svg);
+        wrap.appendChild(span);
+        offersContainer.appendChild(wrap);
     }
 
     function showEmpty() {
@@ -196,7 +236,7 @@
     }
 
     /* ============================================================
-       LOAD OFFERS  (max = 3)
+       LOAD OFFERS
        ============================================================ */
     async function loadOffers() {
         showLoading();
@@ -207,8 +247,10 @@
         }
 
         try {
-            const site = window.location.origin + window.location.pathname;
-            const endpoint = `/.netlify/functions/offers?max=3&site=${encodeURIComponent(site)}`;
+            const site = currentPageSite();
+            const endpoint =
+                `/.netlify/functions/offers` +
+                `?max=3&site=${encodeURIComponent(site)}`;
 
             const response = await fetch(endpoint, {
                 method: "GET",
@@ -226,7 +268,9 @@
                 throw new Error(data.error || "Could not load offers.");
             }
 
-            const offers = Array.isArray(data.offers) ? data.offers.slice(0, 3) : [];
+            const offers = Array.isArray(data.offers)
+                ? data.offers.slice(0, 3)
+                : [];
 
             if (!offers.length) {
                 showEmpty();
@@ -241,40 +285,43 @@
     }
 
     /* ============================================================
-       RENDER OFFERS
+       RENDER
        ============================================================ */
     function renderOffers(offers) {
         if (!offersContainer) return;
         offersContainer.innerHTML = "";
 
         offers.forEach((offer, index) => {
+            const link = safeHttpsUrl(offer.link);
+            if (!link) return; // skip unsafe links
+
             const card = document.createElement("a");
             card.className = "sa-offer";
-            card.href = offer.link;
+            card.href = link;
             card.target = "_blank";
             card.rel = "noopener noreferrer";
             card.style.animationDelay = `${index * 60}ms`;
 
-            /* Image */
+            /* --- Image --- */
             const imgWrap = document.createElement("div");
             imgWrap.className = "sa-offer-imgwrap";
 
-            const image = document.createElement("img");
-            image.className = "sa-offer-image";
-            image.alt = "";
-            image.loading = "lazy";
-
-            if (offer.picture) {
-                image.src = offer.picture;
+            const picture = safeHttpsUrl(offer.picture);
+            if (picture) {
+                const image = document.createElement("img");
+                image.className = "sa-offer-image";
+                image.alt = "";
+                image.loading = "lazy";
+                image.src = picture;
+                imgWrap.appendChild(image);
             } else {
-                image.style.display = "none";
                 imgWrap.classList.add("sa-offer-no-img");
-                imgWrap.innerHTML = `<span>${(offer.name || "?").charAt(0).toUpperCase()}</span>`;
+                const span = document.createElement("span");
+                span.textContent = (offer.name || "?").charAt(0).toUpperCase();
+                imgWrap.appendChild(span);
             }
 
-            imgWrap.appendChild(image);
-
-            /* Content */
+            /* --- Content --- */
             const content = document.createElement("div");
             content.className = "sa-offer-content";
 
@@ -284,12 +331,13 @@
 
             const desc = document.createElement("div");
             desc.className = "sa-offer-description";
-            desc.textContent = offer.description || "Complete the requirements to unlock.";
+            desc.textContent =
+                offer.description || "Complete the requirements to unlock.";
 
             content.appendChild(name);
             content.appendChild(desc);
 
-            /* Arrow */
+            /* --- Arrow --- */
             const arrow = document.createElement("div");
             arrow.className = "sa-offer-arrow";
             arrow.innerHTML = `
@@ -304,7 +352,10 @@
 
             card.addEventListener("click", () => {
                 try {
-                    localStorage.setItem("stickach_last_offer_click", String(Date.now()));
+                    localStorage.setItem(
+                        "stickach_last_offer_click",
+                        String(Date.now())
+                    );
                 } catch (_) {}
                 showOpenedMessage();
             });
