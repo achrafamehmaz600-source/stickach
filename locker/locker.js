@@ -25,7 +25,6 @@
           <div class="sa-locker-box">
 
             <div class="sa-locker-glow"></div>
-
             <div class="sa-locker-top-line"></div>
 
             <div class="sa-locker-header">
@@ -45,24 +44,67 @@
 
             <div class="sa-locker-body">
 
-              <div class="sa-game-preview">
-                <img id="sa-game-image" class="sa-game-image" src="" alt="">
-                <div class="sa-game-info">
-                  <div class="sa-game-label">Selected game</div>
-                  <div id="sa-game-name" class="sa-game-name">Your game</div>
+              <!-- 1. Game Header (Matched to image style) -->
+              <div class="sa-game-header">
+                <div class="sa-game-header-top">
+                  <img id="sa-game-image" class="sa-game-image" src="" alt="">
+                  <div class="sa-game-header-info">
+                    <div id="sa-game-name" class="sa-game-header-name">GTA V Mobile</div>
+                    <div class="sa-game-header-sub">open-world - 1.9 GB</div>
+                  </div>
+                  <div class="sa-game-header-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                      <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                  </div>
                 </div>
-                <div class="sa-game-badge">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <path d="M20 6L9 17l-5-5"/>
-                  </svg>
+                <div class="sa-game-header-verified">
+                  <span class="sa-locker-kicker-dot" style="width: 4px; height: 4px;"></span>
+                  Quick Survey - Verified
                 </div>
               </div>
 
+              <!-- 2. Today's Deal -->
+              <div class="sa-deal-box">
+                <div class="sa-deal-label">TODAY'S DEAL</div>
+                <div class="sa-deal-price">
+                  <span class="sa-deal-crossed">$19.99</span> → <span class="sa-deal-free">FREE</span>
+                </div>
+                <div class="sa-deal-sub">You save $19.99 - normally premium</div>
+              </div>
+
+              <!-- 3. How to Unlock -->
+              <div class="sa-steps-box">
+                <div class="sa-steps-title">HOW TO UNLOCK - JUST 3 STEPS</div>
+                <div class="sa-steps-grid">
+                  <div class="sa-step">
+                    <div class="sa-step-num">1</div>
+                    <div class="sa-step-text">Pick a free<br>offer below</div>
+                    <div class="sa-step-sub">no card asked</div>
+                  </div>
+                  <div class="sa-step">
+                    <div class="sa-step-num">2</div>
+                    <div class="sa-step-text">Answer a few<br>questions</div>
+                    <div class="sa-step-sub">easy & fast</div>
+                  </div>
+                  <div class="sa-step">
+                    <div class="sa-step-num">3</div>
+                    <div class="sa-step-text">Game<br>unlocks</div>
+                    <div class="sa-step-sub">automatic, no wait</div>
+                  </div>
+                </div>
+                <div class="sa-steps-note">
+                  A "free offer" here = a quick survey on topics you find interesting.<br>
+                  Answer honestly, ~1 minute. Then your $19.99 game starts downloading automatically.
+                </div>
+              </div>
+
+              <!-- 4. Pick One Offer Below -->
               <div class="sa-locker-progress">
+                <div class="sa-locker-progress-text">— PICK ONE OFFER BELOW —</div>
                 <div class="sa-locker-progress-bar">
                   <div class="sa-locker-progress-fill"></div>
                 </div>
-                <div class="sa-locker-progress-text">Step 1 of 2 — Complete one offer</div>
               </div>
 
               <p id="sa-locker-message" class="sa-locker-message">
@@ -71,11 +113,39 @@
 
               <div id="sa-offers" class="sa-offers"></div>
 
-              <div class="sa-footer">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:14px;height:14px;flex-shrink:0">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-                <span>Offers are provided by verified third-party advertisers.</span>
+              <!-- 5. How to Complete -->
+              <div class="sa-complete-box">
+                <div class="sa-complete-title">HOW TO COMPLETE</div>
+                <div class="sa-complete-list">
+                  <div class="sa-complete-item">
+                    <div class="sa-complete-num">1</div>
+                    <div><strong>Tap</strong> an offer above — quick survey</div>
+                  </div>
+                  <div class="sa-complete-item">
+                    <div class="sa-complete-num">2</div>
+                    <div><strong>Answer</strong> the questions honestly</div>
+                  </div>
+                  <div class="sa-complete-item">
+                    <div class="sa-complete-num">3</div>
+                    <div><strong>Complete</strong> the survey (~1 minute)</div>
+                  </div>
+                  <div class="sa-complete-item">
+                    <div class="sa-complete-num">4</div>
+                    <div><strong>Come back</strong> — game downloads automatically</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 6. Help Footer (Accordion) -->
+              <div class="sa-help-footer">
+                <div class="sa-help-toggle">
+                  <div class="sa-help-icon">?</div>
+                  <div>Need detailed help completing the offer?</div>
+                  <div class="sa-help-arrow">▼</div>
+                </div>
+                <div class="sa-help-content">
+                  Pick the offer that feels easiest. All unlock the same game.
+                </div>
               </div>
 
             </div>
@@ -105,8 +175,6 @@
     /* ============================================================
        HELPERS
        ============================================================ */
-
-    // Returns a safe http(s) URL or "" if invalid.
     function safeHttpsUrl(url) {
         try {
             const u = new URL(url, window.location.origin);
@@ -118,8 +186,6 @@
         }
     }
 
-    // Full URL of the current page (path + query, no hash).
-    // This is what OGAds expects for the `site` param.
     function currentPageSite() {
         return (
             window.location.origin +
@@ -178,6 +244,15 @@
             window.closeLocker();
         }
     });
+
+    // Accordion Toggle for Help Footer
+    const helpToggle = document.querySelector('.sa-help-toggle');
+    if (helpToggle) {
+        helpToggle.addEventListener('click', () => {
+            const footer = helpToggle.closest('.sa-help-footer');
+            if (footer) footer.classList.toggle('open');
+        });
+    }
 
     /* ============================================================
        UI STATES
@@ -293,7 +368,7 @@
 
         offers.forEach((offer, index) => {
             const link = safeHttpsUrl(offer.link);
-            if (!link) return; // skip unsafe links
+            if (!link) return;
 
             const card = document.createElement("a");
             card.className = "sa-offer";
@@ -302,7 +377,6 @@
             card.rel = "noopener noreferrer";
             card.style.animationDelay = `${index * 60}ms`;
 
-            /* --- Image --- */
             const imgWrap = document.createElement("div");
             imgWrap.className = "sa-offer-imgwrap";
 
@@ -321,7 +395,6 @@
                 imgWrap.appendChild(span);
             }
 
-            /* --- Content --- */
             const content = document.createElement("div");
             content.className = "sa-offer-content";
 
@@ -337,7 +410,6 @@
             content.appendChild(name);
             content.appendChild(desc);
 
-            /* --- Arrow --- */
             const arrow = document.createElement("div");
             arrow.className = "sa-offer-arrow";
             arrow.innerHTML = `
