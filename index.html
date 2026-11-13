@@ -1219,6 +1219,14 @@ body::before {
   .social-link { width: 40px; height: 40px; }
 }
 
+/* Put the hero copy first on narrow screens. Network native creatives can
+   be very tall on small phones, and they must not bury the headline. */
+@media (max-width: 799.98px) {
+  .hero > .container { display: flex; flex-direction: column; }
+  .hero > .container > .adx-land-native { order: 2; }
+  .hero > .container > .hero__inner { order: 1; }
+}
+
 @media (max-width: 400px) {
   .logo { font-size: var(--text-xl); }
   .footer-bottom__links { gap: var(--space-4); }
@@ -1292,14 +1300,14 @@ body::before {
 
     <div class="container">
 
-      <!-- Adsterra: desktop native mount (filled only at >=800px) -->
-      <div id="adx-native-desktop-mount"></div>
-
-      <!-- Adsterra: 320x50 at the top on mobile only -->
-      <aside class="adx-slot adx-hero-mobile adx-mobile-only" data-adx="banner" data-adx-mobile="320x50" aria-label="Advertisement">
+      <!-- Adsterra: native banner below the header -->
+      <aside id="adx-land-native" class="adx-slot adx-land-native" data-adx="native" aria-label="Advertisement">
         <span class="adx-label">Advertisement</span>
-        <div class="adx-frame"></div>
+        <div class="adx-native-box">
+          <div id="container-6485158c813fef21d30337b3bbc0a341"></div>
+        </div>
       </aside>
+      <script async="async" data-cfasync="false" src="https://bauval.org/21/6485158c813fef21d30337b3bbc0a341"></script>
 
       <div class="hero__inner">
 
@@ -1414,24 +1422,6 @@ body::before {
       </div>
     </div>
   </div>
-
-  <!-- Adsterra: native banner (below header on desktop, after the hero on mobile) -->
-  <aside id="adx-land-native" class="adx-slot adx-land-native" data-adx="native" aria-label="Advertisement">
-    <span class="adx-label">Advertisement</span>
-    <div class="adx-native-box">
-      <div id="container-6485158c813fef21d30337b3bbc0a341"></div>
-    </div>
-  </aside>
-  <script>
-    (function () {
-      var slot = document.getElementById('adx-land-native');
-      var mount = document.getElementById('adx-native-desktop-mount');
-      if (slot && mount && window.matchMedia('(min-width: 800px)').matches) {
-        mount.appendChild(slot);
-      }
-    })();
-  </script>
-  <script async="async" data-cfasync="false" src="https://bauval.org/21/6485158c813fef21d30337b3bbc0a341"></script>
 
   <!-- ═══════════════════════════════════════════
        MAIN CONTENT
@@ -1661,8 +1651,8 @@ body::before {
               </a>
             </div>
           </article>
-          <!-- Adsterra: 728x90 between game-card groups (desktop only) -->
-          <aside class="adx-slot adx-grid-break adx-desktop-only" data-adx="banner" data-adx-desktop="728x90" aria-label="Advertisement">
+          <!-- Adsterra: mid-grid banner (728x90 desktop / 320x50 mobile) -->
+          <aside class="adx-slot adx-grid-break" data-adx="banner" data-adx-desktop="728x90" data-adx-mobile="320x50" aria-label="Advertisement">
             <span class="adx-label">Advertisement</span>
             <div class="adx-frame"></div>
           </aside>
