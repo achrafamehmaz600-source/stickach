@@ -1,0 +1,178 @@
+/* ============================================================
+   Adsterra placements — additive, scoped to .adx-* only.
+   Does not change any existing class, id or layout rule.
+
+   Slots are collapsed until real ad markup is detected. Empty
+   placements therefore reserve no label, margin, padding or gap.
+   ============================================================ */
+
+.adx-slot {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  contain: inline-size;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+.adx-slot[hidden] { display: none !important; }
+
+/* Collapsed state: keeps the ad renderable, but removes it from flow. */
+.adx-slot:not(.is-filled) {
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.adx-slot:not(.is-filled) .adx-label { display: none; }
+
+.adx-slot:not(.is-filled) .adx-frame,
+.adx-slot:not(.is-filled) .adx-native-box {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  max-width: 100%;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* A pending in-grid slot must not create an empty grid row/gap. */
+.adx-grid-break:not(.is-filled) {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  height: 0;
+}
+
+/* Filled state */
+.adx-slot.is-filled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-block: 1.35rem;
+}
+
+.adx-label {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #8b84a8;
+  opacity: 0.85;
+}
+
+.adx-frame {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.adx-stage {
+  position: relative;
+  flex: 0 0 auto;
+  transform-origin: top center;
+}
+
+.adx-stage > iframe {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.adx-native-box {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.adx-native-box > div { max-width: 100%; }
+
+/* Landing page — native banner below the header */
+.adx-land-native.is-filled {
+  margin-block: 1.25rem 0;
+  padding-inline: 1rem;
+}
+
+/* Landing page — responsive grid banner: 728x90 desktop / 320x50 mobile */
+.adx-grid-break.is-filled {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-block: 0.25rem;
+}
+
+/* Game pages — banner above the app/game area */
+.adx-game-top.is-filled {
+  margin: 0.25rem 0 1.6rem;
+}
+
+/* Game pages — 300x250 below the app/game area */
+.adx-game-mid.is-filled {
+  margin-block: 1.75rem 0.5rem;
+  padding-inline: 1rem;
+}
+
+/* Game pages — native banner after the main content */
+.adx-game-native.is-filled {
+  margin-block: 2rem 2.25rem;
+  padding-inline: 1rem;
+}
+
+/* Mobile: give fixed-width banners the full viewport width so the
+   320x50 creative can remain 50px tall instead of being scaled. */
+@media (max-width: 799.98px) {
+  .adx-game-top.is-filled {
+    width: calc(100% + 2.3rem);
+    max-width: none;
+    margin-inline: -1.15rem;
+  }
+
+  /* This slot is already full-width outside .wrap. */
+  .adx-game-mid.is-filled { padding-inline: 0; }
+}
+
+@media (min-width: 481px) and (max-width: 799.98px) {
+  .adx-grid-break.is-filled {
+    width: calc(100% + 2.5rem);
+    max-width: none;
+    margin-inline: calc(var(--space-5) * -1);
+  }
+}
+
+@media (max-width: 480px) {
+  .adx-grid-break.is-filled {
+    width: calc(100% + 2rem);
+    max-width: none;
+    margin-inline: calc(var(--space-4) * -1);
+  }
+}
+
+@media (max-width: 400px) {
+  .adx-game-top.is-filled {
+    width: calc(100% + 1.9rem);
+    max-width: none;
+    margin-inline: -0.95rem;
+  }
+}
