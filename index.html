@@ -1235,6 +1235,8 @@ body::before {
   .btn-dl::after { animation: none !important; }
 }
 </style>
+  <!-- Adsterra placement styles (additive, scoped) -->
+  <link rel="stylesheet" href="ads/adx.css">
 </head>
 
 <body>
@@ -1289,6 +1291,16 @@ body::before {
     <div class="hero__orb hero__orb--3" aria-hidden="true"></div>
 
     <div class="container">
+
+      <!-- Adsterra: desktop native mount (filled only at >=800px) -->
+      <div id="adx-native-desktop-mount"></div>
+
+      <!-- Adsterra: 320x50 at the top on mobile only -->
+      <aside class="adx-slot adx-hero-mobile adx-mobile-only" data-adx="banner" data-adx-mobile="320x50" aria-label="Advertisement">
+        <span class="adx-label">Advertisement</span>
+        <div class="adx-frame"></div>
+      </aside>
+
       <div class="hero__inner">
 
         <!-- Left: copy -->
@@ -1402,6 +1414,24 @@ body::before {
       </div>
     </div>
   </div>
+
+  <!-- Adsterra: native banner (below header on desktop, after the hero on mobile) -->
+  <aside id="adx-land-native" class="adx-slot adx-land-native" data-adx="native" aria-label="Advertisement">
+    <span class="adx-label">Advertisement</span>
+    <div class="adx-native-box">
+      <div id="container-6485158c813fef21d30337b3bbc0a341"></div>
+    </div>
+  </aside>
+  <script>
+    (function () {
+      var slot = document.getElementById('adx-land-native');
+      var mount = document.getElementById('adx-native-desktop-mount');
+      if (slot && mount && window.matchMedia('(min-width: 800px)').matches) {
+        mount.appendChild(slot);
+      }
+    })();
+  </script>
+  <script async="async" data-cfasync="false" src="https://bauval.org/21/6485158c813fef21d30337b3bbc0a341"></script>
 
   <!-- ═══════════════════════════════════════════
        MAIN CONTENT
@@ -1631,6 +1661,11 @@ body::before {
               </a>
             </div>
           </article>
+          <!-- Adsterra: 728x90 between game-card groups (desktop only) -->
+          <aside class="adx-slot adx-grid-break adx-desktop-only" data-adx="banner" data-adx-desktop="728x90" aria-label="Advertisement">
+            <span class="adx-label">Advertisement</span>
+            <div class="adx-frame"></div>
+          </aside>
           <article class="game-card" data-title="Forza Horizon 5 Mobile">
             <div class="game-card__header">
               <div class="game-card__thumb">
@@ -3437,6 +3472,8 @@ body::before {
       });
     })();
   </script>
+  <!-- Adsterra placement loader -->
+  <script src="ads/adx.js" defer></script>
   <!-- 100% privacy-first analytics -->
   <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b4784ba1114940d3a387404048216ff6"}'></script>
